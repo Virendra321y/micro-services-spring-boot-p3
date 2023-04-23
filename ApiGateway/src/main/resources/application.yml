@@ -1,0 +1,35 @@
+server:
+  port: 8084
+  
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+      - id: USER-SERVICE
+        uri: lb://USER-SERVICE
+        predicates:
+        - Path=/users/**
+        
+      - id: HOTEL-SERVICE
+        uri: lb://HOTEL-SERVICE
+        predicates:
+        - Path=/hotels/**,/staffs/**
+# Agar hamko multiple urls ko kisi controller ka acces karna hota hai tab hamko sabhi urls ko yaha pe mention karna padta like jo requestMapping me jo dete hai usko de ke remanig ke lia /** likh dete hai jise us contrlloer ka sabhi datas acces ho jaye ge
+        
+        
+      - id: USER-SERVICE
+        uri: lb://RATING-SERVICE
+        predicates:
+        - Path=/ratings/**
+    
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka 
